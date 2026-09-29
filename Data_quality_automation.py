@@ -1,13 +1,16 @@
 import pandas as pd
 import psycopg2
 
+# Sensitive database credentials are replaced with placeholders
+# to prevent exposing private connection details on GitHub.
 # connect to postgresql
 conn = psycopg2.connect(
-    host="localhost",
-    database="Data_quality_check",
-    password="Postgres@123",
-    user="postgres",
+    host="#####",
+    database="#####",
+    user="#####",
+    password="#####"
 )
+
 print("postgresql connected succesfully " )
 
 # read tables
