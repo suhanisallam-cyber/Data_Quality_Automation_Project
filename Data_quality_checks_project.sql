@@ -455,3 +455,120 @@ select
 from table_scores
 order by table_name;
 
+-- missing city 
+select *
+from candidates
+where city is null;
+
+-- filling missing city values
+update candidates
+set city = 'unknown'
+where candidate_id in (3, 9);
+
+select candidate_id, city
+from candidates
+where candidate_id in (3, 9);
+
+-- duplicate employers
+select company_name, count(*) as duplicate_count
+from employers
+group by company_name
+having count(*) > 1;
+
+-- duplicate employers detail
+select employer_id, company_name, email, phone, city
+from employers
+where company_name in (
+    select company_name
+    from employers
+    group by company_name
+    having count(*) > 1
+)
+order by company_name, employer_id;
+
+
+-- Checking duplicate employers and identify whether each duplicate employer
+-- is linked to any postings before deciding how to handle the duplicate records.
+
+select
+    e.employer_id,
+    e.company_name,
+    count(p.posting_id) as posting_count
+from employers e
+left join postings p
+    on p.employer_id = e.employer_id
+where e.company_name in (
+    select company_name
+    from employers
+    group by company_name
+    having count(*) > 1
+)
+group by e.employer_id, e.company_name
+order by e.company_name, e.employer_id;
+
+-- Remove the duplicate employer record that is not linked to any posting.
+-- Employer 101 is retained because it has a linked posting.
+
+delete from employers
+where employer_id = 106; 
+
+-- Verifying that no duplicate company names remain in the employers table.
+select company_name, count(*) as company_count
+from employers
+group by company_name
+having count(*) > 1;
+
+-- Identifying  applications that reference a posting that does not exist.
+-- These are called orphan application records.
+
+select
+    a.application_id,
+    a.candidate_id,
+    a.posting_id,
+    a.application_date,
+    a.status
+from applications a
+left join postings p
+    on a.posting_id = p.posting_id
+where p.posting_id is null;
+
+-- Viewing  the complete orphan application record before fixing it.
+-- This helps us decide whether to correct the posting_id or remove the test record.
+
+select *
+from applications
+where application_id = 5006;
+
+-- Listing all valid postings that currently exist in the postings table.
+-- We will use these records to identify a possible correct posting_id.
+
+select *
+from postings
+order by posting_id;
+
+-- Listing all valid postings so we can identify a suitable posting_id
+-- for the orphan application.
+
+select
+    posting_id,
+    job_title,
+    employer_id
+from postings
+order by posting_id;
+
+-- Fixing  the orphan application by linking it to a valid existing posting.
+-- Posting 1006 is an existing "Data Quality Intern" posting.
+
+update applications
+set posting_id = 1006
+where application_id = 5006;
+
+-- Verify that the application now references a valid posting.
+select
+    application_id,
+    candidate_id,
+    posting_id,
+    status
+from applications
+where application_id = 5006;
+
