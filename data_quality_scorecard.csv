@@ -1,0 +1,4 @@
+table_name,total_checks,passed_checks,failed_checks,health_score
+candidates,1,1,0,100.0
+employers,1,1,0,100.0
+applications,1,1,0,100.0

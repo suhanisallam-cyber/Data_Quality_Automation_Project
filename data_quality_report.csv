@@ -1,0 +1,4 @@
+check_name,status,failed_records
+missing candidate city,pass,0
+duplicate company names,pass,0
+orphan applications,pass,0

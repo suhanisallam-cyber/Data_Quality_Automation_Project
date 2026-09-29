@@ -1,0 +1,9 @@
+posting_id,employer_id,job_title,location,posted_date,status
+1001,101,SQL Developer Intern,Bhopal,2026-02-01,Open
+1002,102,Data Analyst Intern,Indore,2026-02-02,Open
+1003,103,Python Intern,Pune,2026-02-03,Closed
+1004,104,BI Intern,Bhopal,2026-02-04,Open
+1005,105,Database Intern,Delhi,2026-02-05,Open
+1006,999,Data Quality Intern,Remote,2026-02-06,Open
+1007,107,SQL Analyst Intern,Mumbai,2026-02-07,Open
+1008,108,ETL Intern,Raipur,2026-02-08,Open
